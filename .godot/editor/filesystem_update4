@@ -1,0 +1,4 @@
+res://default_env.tres
+res://src/levels/FirstLevel.tscn
+res://src/destruction/Circle.gd
+res://src/destruction/Destructible.gd
