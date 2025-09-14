@@ -1,4 +1,4 @@
-Spell 'Splosion Game
+Ultimo Bocado Game
 ====================
 
 Project Layout

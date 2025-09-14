@@ -15,8 +15,16 @@ var _attack_power : float = 0
 var _attack_scale : float = 3
 var _attack_clicked : bool = false
 
+var is_active_turn: bool = false
+
 # When _attack_power reaches this we'll force the shot. (ie, this is the max cap of power for any 1 shot)
 @onready var _auto_attack_power : float = (reticule_anchor.get_child_count() / _attack_scale)
+
+signal attack_launched
+signal projectile_fired(projectile)
+
+func _ready():
+	add_to_group("wizards")
 
 func _process(_delta : float):
 	_rotate_reticule()
@@ -24,6 +32,8 @@ func _process(_delta : float):
 
 
 func _unhandled_input(event):
+	if not is_active_turn:
+		return
 	# Click and drag - begin / end clicking
 	if event is InputEventMouseButton && event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
@@ -43,10 +53,11 @@ func shoot():
 	new_projectile.global_position = reticule.global_position
 	new_projectile.linear_velocity = (reticule.global_position - global_position) * weapon_speed * (_attack_power * _attack_scale)
 	get_parent().add_child(new_projectile)
-	
-	# Reset the power-improvement meter
+	# Notificar que un proyectil fue disparado (para que el controlador espere impacto o timeout)
+	emit_signal("projectile_fired", new_projectile)
 	_attack_power = 0
 	_attack_clicked = false
+	emit_signal("attack_launched")
 
 
 func _rotate_reticule():
@@ -111,3 +122,10 @@ func _redraw_power():
 			reticule_anchor.get_child(i).visible = true
 		else:
 			reticule_anchor.get_child(i).visible = false
+
+
+func enable_player_input(enabled: bool):
+	is_active_turn = enabled
+	set_process_input(enabled)
+	set_physics_process(enabled)
+	set_process(enabled)

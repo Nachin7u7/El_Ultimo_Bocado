@@ -4,6 +4,11 @@ extends Camera2D
 var _previous_position : Vector2 = Vector2.ZERO
 var _move_camera := false
 
+func _ready():
+	# Add camera to group so GameController can find it and set a more zoomed-out default
+	add_to_group("cameras")
+	zoom = Vector2(0.7, 0.7)
+
 func _unhandled_input(event):
 	# Click and drag - begin / end clicking
 	if event is InputEventMouseButton && event.button_index == MOUSE_BUTTON_RIGHT:
