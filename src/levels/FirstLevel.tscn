@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cf6ouisg3rasm"]
+[gd_scene load_steps=12 format=3 uid="uid://cf6ouisg3rasm"]
 
 [ext_resource type="Texture2D" uid="uid://cyacjsm5fkqji" path="res://assets/levels/FirstLevel.png" id="1"]
 [ext_resource type="PackedScene" path="res://src/destruction/Destructible.tscn" id="2"]
@@ -6,6 +6,8 @@
 [ext_resource type="Shader" uid="uid://cb8ig7bop0lk2" path="res://src/destruction/parent_material.gdshader" id="4"]
 [ext_resource type="PackedScene" path="res://src/character/wizard.tscn" id="5"]
 [ext_resource type="Texture2D" uid="uid://dq4ponfti06xo" path="res://icon.png" id="6"]
+[ext_resource type="Script" uid="uid://dgspih8t3isqk" path="res://src/scripts/GameController.gd" id="7"]
+[ext_resource type="Script" uid="uid://bhoyih3vxqh03" path="res://src/scripts/Menu.gd" id="8"]
 
 [sub_resource type="ShaderMaterial" id="1"]
 shader = ExtResource("4")
@@ -49,3 +51,12 @@ script = ExtResource("3")
 
 [node name="Wizard" parent="." instance=ExtResource("5")]
 position = Vector2(2608.36, 1602.25)
+
+[node name="Wizard2" parent="." instance=ExtResource("5")]
+position = Vector2(2400, 1600)
+
+[node name="GameController" type="Node" parent="."]
+script = ExtResource("7")
+
+[node name="Menu" type="CanvasLayer" parent="."]
+script = ExtResource("8")
