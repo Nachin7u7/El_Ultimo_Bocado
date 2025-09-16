@@ -1,4 +1,10 @@
 res://default_env.tres
 res://src/levels/FirstLevel.tscn
-res://src/destruction/Circle.gd
-res://src/destruction/Destructible.gd
+res://src/levels/saltenha.gd
+res://src/levels/character_body_2d.gd
+res://src/character/wizard.gd
+res://node_2d.tscn
+res://src/character/wizard.tscn
+res://src/character/node_2d.tscn
+res://src/character/saltenha.tscn
+res://src/character/character_body_2d.gd
