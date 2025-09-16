@@ -1,0 +1,76 @@
+[gd_scene load_steps=4 format=3 uid="uid://be0j7ettnkap7"]
+
+[ext_resource type="Script" uid="uid://b7jlvjjpbms3p" path="res://Menu/main_menu.gd" id="1_dtkyu"]
+[ext_resource type="Texture2D" uid="uid://cwxgc27wx4kma" path="res://Menu/BG_MainMenu.png" id="1_sla5p"]
+[ext_resource type="Texture2D" uid="uid://cj4gyb5tdx138" path="res://Menu/Game_Title.png" id="2_ci1se"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dtkyu")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.374139, 0.374139, 0.374139, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_sla5p")
+expand_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BoxContainer" type="BoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+alignment = 1
+vertical = true
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/BoxContainer"]
+custom_minimum_size = Vector2(500, 300)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("2_ci1se")
+expand_mode = 1
+
+[node name="Play" type="Button" parent="MarginContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_hover_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 70
+text = "  Jugar  "
+
+[node name="Exit" type="Button" parent="MarginContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_hover_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = " Salir "
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.450648, 0.450648, 0.450648, 1)
+text = "Juego hecho por:  
+
+- Ricardo Valencia  
+- Alexander Cruz  
+- Mariana Del Arroyo  
+"
+horizontal_alignment = 1

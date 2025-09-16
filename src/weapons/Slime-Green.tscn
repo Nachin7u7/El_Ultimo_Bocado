@@ -1,10 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://bpqgtj2q54keb"]
 
-[ext_resource path="res://assets/weapons/slime-green.png" type="Texture2D" id=1]
-[ext_resource path="res://src/weapons/Slime-Green.gd" type="Script" id=2]
-[ext_resource path="res://src/weapons/Explosion.tscn" type="PackedScene" id=3]
+[ext_resource type="Script" uid="uid://bvpo3lxecityv" path="res://src/weapons/Slime-Green.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://jrx2prp7bj7" path="res://src/weapons/Explosion.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://t5kx8d0xjyyu" path="res://assets/weapons/black_olive.png" id="3_c2xem"]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id="1"]
 radius = 15.5611
 
 [node name="Slime-Green" type="RigidBody2D"]
@@ -12,15 +12,17 @@ collision_layer = 3
 collision_mask = 2
 mass = 10.0
 gravity_scale = 10.0
-max_contacts_reported = 1
 contact_monitor = true
-script = ExtResource( 2 )
+max_contacts_reported = 1
+script = ExtResource("2")
 explosion_radius = 60.0
-explosion_scene = ExtResource( 3 )
+explosion_scene = ExtResource("3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource( 1 )
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_c2xem")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource("1")
+
 [connection signal="body_entered" from="." to="." method="_on_SlimeGreen_body_entered"]

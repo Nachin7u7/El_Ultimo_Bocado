@@ -1,0 +1,125 @@
+[gd_scene load_steps=12 format=3 uid="uid://bf5ydt52h7lq3"]
+
+[ext_resource type="Script" uid="uid://cq2bj6vdhd1br" path="res://src/character/wizard.gd" id="1_rucxp"]
+[ext_resource type="PackedScene" uid="uid://bpqgtj2q54keb" path="res://src/weapons/Slime-Green.tscn" id="2_t473s"]
+[ext_resource type="Texture2D" uid="uid://6t3k7v52t7al" path="res://assets/characters/Saltenia_Idle.png" id="3_1xcj7"]
+[ext_resource type="Texture2D" uid="uid://ds4soaw80wtn5" path="res://assets/characters/saltenia_dead.png" id="3_t473s"]
+[ext_resource type="Texture2D" uid="uid://by4pwkqb1okfm" path="res://assets/characters/Saltenia_walking_spritesheet.png" id="4_rucxp"]
+[ext_resource type="Texture2D" uid="uid://t5kx8d0xjyyu" path="res://assets/weapons/black_olive.png" id="5_rucxp"]
+[ext_resource type="Texture2D" uid="uid://clp71vspc1acp" path="res://assets/reticule.png" id="6_1f5as"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t473s"]
+atlas = ExtResource("4_rucxp")
+region = Rect2(0, 0, 861, 1080)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0salm"]
+atlas = ExtResource("4_rucxp")
+region = Rect2(861, 0, 861, 1080)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rucxp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_t473s")
+}],
+"loop": false,
+"name": &"Death",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_1xcj7")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t473s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1xcj7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0salm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1xcj7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1xcj7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t473s")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 11.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="1"]
+radius = 26.8793
+height = 53.7586
+
+[node name="Saltenia" type="CharacterBody2D"]
+script = ExtResource("1_rucxp")
+_reticule_anchor_node_path = NodePath("ReticuleAnchor")
+weapon_projectile = ExtResource("2_t473s")
+
+[node name="Frames" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+sprite_frames = SubResource("SpriteFrames_rucxp")
+animation = &"Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.492912, 4.04306)
+shape = SubResource("1")
+
+[node name="ReticuleAnchor" type="Node2D" parent="."]
+
+[node name="Sprite4" type="Sprite2D" parent="ReticuleAnchor"]
+visible = false
+position = Vector2(34, 0)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("5_rucxp")
+
+[node name="Sprite3" type="Sprite2D" parent="ReticuleAnchor"]
+visible = false
+position = Vector2(48, 0)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_rucxp")
+
+[node name="Sprite2" type="Sprite2D" parent="ReticuleAnchor"]
+visible = false
+position = Vector2(70, 0)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_rucxp")
+
+[node name="Sprite2D" type="Sprite2D" parent="ReticuleAnchor"]
+visible = false
+position = Vector2(100, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_rucxp")
+
+[node name="Reticule" type="Sprite2D" parent="ReticuleAnchor"]
+position = Vector2(100, 0)
+scale = Vector2(2, 2)
+texture = ExtResource("6_1f5as")
+
+[node name="HP" type="Label" parent="."]
+offset_left = -21.0
+offset_top = -102.0
+offset_right = 33.0
+offset_bottom = -79.0
+text = "200 HP"
+
+[node name="Damage" type="Label" parent="."]
+visible = false
+offset_left = 37.0
+offset_top = -64.0
+offset_right = 91.0
+offset_bottom = -41.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "- 40"

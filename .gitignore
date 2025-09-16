@@ -1,0 +1,47 @@
+# Godot
+.import/
+.export/
+.export-*/*
+*.import
+*.tmp
+*.log
+*.cfg
+*.translation
+*.godot/settings-*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python virtualenv
+venv/
+ENV/
+
+# VSCode
+.vscode/
+
+# Archivos temporales y de respaldo
+*~
+*.bak
+*.swp
+*.swo
+
+# Archivos de usuario Godot
+*.godot/
+*.godot/settings-*
+
+# Archivos de lock
+.lock
+
+# Archivos de caché
+.cache/
+
+# Archivos de build
+build/
+dist/
+
+# Otros
+.idea/
+*.orig
+*.rej

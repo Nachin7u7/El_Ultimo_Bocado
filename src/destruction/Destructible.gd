@@ -14,6 +14,7 @@ var _parent_material : Material
 var _destruction_threads := Array()
 var _viewport_destruction_node : Node
 
+
 func _ready():
 	add_to_group("destructibles")
 
@@ -39,8 +40,13 @@ func _ready():
 	# Start the timer, so it can delete our duplicated parent info
 	$CullTimer.start()
 
-	# Wait for all viewports to re-render before we build our image
+	# Esperar a que el sprite esté listo y la textura cargada
 	await RenderingServer.frame_post_draw
+	# Eliminar colliders antiguos y reconstruir con la textura actual
+	for child in collision_holder.get_children():
+		if child is CollisionPolygon2D:
+			child.queue_free()
+	await get_tree().process_frame
 	build_collisions_from_image()
 
 
@@ -50,11 +56,7 @@ func _exit_tree():
 
 
 func _unhandled_input(event):
-	if (event.is_action_pressed("ui_accept")):
-		# DEBUG:
-		var bitmap := BitMap.new()
-		bitmap.create_from_image_alpha($Sprite2D.texture.get_image())
-		$Sprite2D.texture.get_image().save_png("res://screenshots/debug" + get_parent().name + ".png")
+	pass # Screenshot saving disabled
 
 
 @warning_ignore("shadowed_variable_base_class")
@@ -105,8 +107,12 @@ func rebuild_collisions_from_geometry(arguments : Array):
 	var position : Vector2 = arguments[0]
 	var radius : float = arguments[1]
 
+	# Defer the main logic to ensure thread safety
+	call_deferred("_rebuild_collisions_main", position, radius)
+
+
+func _rebuild_collisions_main(position: Vector2, radius: float):
 	# Convert world coordinates of the collision point to local coordinates
-	# We need to do this because the collision polygon coordinates are only available in local space
 	position = position - global_position
 
 	var nb_points = 8
@@ -130,15 +136,9 @@ func rebuild_collisions_from_geometry(arguments : Array):
 			var clipped_collision = clipped_polygons[i]
 
 			# Ignore clipped polygons that are too small to actually create
-			# These are awkward single or two-point floaters.
-			# If we can't at least make a triangle from it, we don't care about it
 			if clipped_collision.size() < 3:
 				continue
 
-			# God knows why, but creating a PoolVector2Array from the Geometry Array fails
-			# ie, PoolVector2Array(Geometry.clip_polygons_2d(points_arc, collision_polygon.polygon))
-			# Doesn't give you a PoolVector2Array with all the points!
-			# So we'll iterate through and manually copy them ourselves :(
 			var points = PackedVector2Array()
 			for point in clipped_collision:
 				points.push_back(point)
@@ -146,10 +146,7 @@ func rebuild_collisions_from_geometry(arguments : Array):
 			# Update the existing polygon if possible
 			if i == 0:
 				collision_polygon.call_deferred("set", "polygon", points)
-
 			else:
-				# Otherwise, our clipping created independent islands!
-				# We'll need to add a CollisionPolygon for each of them
 				var collider := CollisionPolygon2D.new()
 				collider.polygon = points
 				collision_holder.call_deferred("add_child", collider)

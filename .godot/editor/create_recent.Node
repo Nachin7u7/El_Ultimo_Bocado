@@ -1,0 +1,13 @@
+CollisionShape2D
+Area2D
+Sprite2D
+WorldEnvironment
+CanvasLayer
+Label
+TextureRect
+Control
+Button
+BoxContainer
+MarginContainer
+AnimationPlayer
+AnimatedSprite2D

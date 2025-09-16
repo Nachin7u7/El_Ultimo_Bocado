@@ -1,44 +1,32 @@
-[gd_scene load_steps=12 format=3 uid="uid://cf6ouisg3rasm"]
+[gd_scene load_steps=14 format=3 uid="uid://cf6ouisg3rasm"]
 
-[ext_resource type="Texture2D" uid="uid://cyacjsm5fkqji" path="res://assets/levels/FirstLevel.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://ccauumlcnyq78" path="res://assets/levels/sky.jpg" id="1_vwqu0"]
 [ext_resource type="PackedScene" path="res://src/destruction/Destructible.tscn" id="2"]
+[ext_resource type="Texture2D" uid="uid://djhlqyeyqry7w" path="res://assets/levels/LaPaz.png" id="2_urjbw"]
 [ext_resource type="Script" uid="uid://c466fojiom3q1" path="res://src/scripts/Camera.gd" id="3"]
 [ext_resource type="Shader" uid="uid://cb8ig7bop0lk2" path="res://src/destruction/parent_material.gdshader" id="4"]
-[ext_resource type="PackedScene" path="res://src/character/wizard.tscn" id="5"]
-[ext_resource type="Texture2D" uid="uid://dq4ponfti06xo" path="res://icon.png" id="6"]
+[ext_resource type="PackedScene" uid="uid://rcb4jb3r80c4" path="res://src/character/wizard.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://bf5ydt52h7lq3" path="res://src/character/Saltenia.tscn" id="6_urjbw"]
 [ext_resource type="Script" uid="uid://dgspih8t3isqk" path="res://src/scripts/GameController.gd" id="7"]
 [ext_resource type="Script" uid="uid://bhoyih3vxqh03" path="res://src/scripts/Menu.gd" id="8"]
-
-[sub_resource type="ShaderMaterial" id="1"]
-shader = ExtResource("4")
-
-[sub_resource type="ShaderMaterial" id="2"]
-shader = ExtResource("4")
+[ext_resource type="Script" uid="uid://7sq83lwska1r" path="res://src/levels/result_game.gd" id="10_vwqu0"]
+[ext_resource type="Script" uid="uid://s3wum1aai1cs" path="res://src/levels/death_zone.gd" id="11_5nfue"]
 
 [sub_resource type="ShaderMaterial" id="3"]
 shader = ExtResource("4")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vwqu0"]
+size = Vector2(214.142, 20)
+
 [node name="FirstLevel" type="Node2D"]
 
-[node name="Test1" type="Sprite2D" parent="."]
-material = SubResource("1")
-position = Vector2(2203.09, 1696)
-texture = ExtResource("6")
-centered = false
-
-[node name="Destructible" parent="Test1" instance=ExtResource("2")]
-
-[node name="Test2" type="Sprite2D" parent="."]
-material = SubResource("2")
-position = Vector2(2274.35, 1617.93)
-texture = ExtResource("6")
-centered = false
-
-[node name="Destructible" parent="Test2" instance=ExtResource("2")]
+[node name="Sky" type="Sprite2D" parent="."]
+scale = Vector2(10, 10)
+texture = ExtResource("1_vwqu0")
 
 [node name="DestructibleForeground" type="Sprite2D" parent="."]
 material = SubResource("3")
-texture = ExtResource("1")
+texture = ExtResource("2_urjbw")
 centered = false
 
 [node name="Destructible" parent="DestructibleForeground" instance=ExtResource("2")]
@@ -46,17 +34,30 @@ viewport_destruction_nodepath = NodePath("../Destructible/SubViewport/Circle")
 collision_holder_node_path = NodePath("../Destructible/CollisionHolder")
 
 [node name="Camera3D" type="Camera2D" parent="."]
-position = Vector2(2497.4, 1786.07)
+position = Vector2(575, 322)
 script = ExtResource("3")
 
-[node name="Wizard" parent="." instance=ExtResource("5")]
-position = Vector2(2608.36, 1602.25)
+[node name="Saltenia" parent="." instance=ExtResource("6_urjbw")]
+position = Vector2(786, 110)
 
-[node name="Wizard2" parent="." instance=ExtResource("5")]
-position = Vector2(2400, 1600)
+[node name="Tucumana" parent="." instance=ExtResource("5")]
+position = Vector2(446, 118)
 
 [node name="GameController" type="Node" parent="."]
 script = ExtResource("7")
 
 [node name="Menu" type="CanvasLayer" parent="."]
 script = ExtResource("8")
+
+[node name="ResultGame" type="CanvasLayer" parent="."]
+script = ExtResource("10_vwqu0")
+
+[node name="DeathZone" type="Area2D" parent="."]
+script = ExtResource("11_5nfue")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathZone"]
+position = Vector2(-0.5, 1917)
+scale = Vector2(37.1856, -29.1476)
+shape = SubResource("RectangleShape2D_vwqu0")
+
+[connection signal="body_entered" from="DeathZone" to="DeathZone" method="_on_body_entered"]

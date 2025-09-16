@@ -1,6 +1,8 @@
 res://default_env.tres
 res://src/levels/FirstLevel.tscn
-res://src/character/wizard.gd
-res://src/scripts/GameController.gd
 res://src/scripts/Menu.gd
-res://src/scripts/Camera.gd
+res://src/levels/death_zone.gd
+res://src/character/wizard.tscn
+res://src/character/Saltenia.tscn
+res://Menu/main_menu.tscn
+res://src/levels/result_game.tscn

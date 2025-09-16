@@ -4,16 +4,23 @@ extends RigidBody2D
 @export var explosion_scene : PackedScene
 
 func _on_SlimeGreen_body_entered(_body):
-	# Tell the destruction system that we're causing an explosion
+	# Destruir objetos destructibles
 	get_tree().call_group("destructibles", "destroy", global_position, explosion_radius)
-	
-	# Display explosion animation
+
+	# Daño a jugadores dentro del radio
+	var wizards = get_tree().get_nodes_in_group("wizards")
+	for wizard in wizards:
+		if not wizard.has_method("apply_damage"):
+			continue
+		var dist = global_position.distance_to(wizard.global_position)
+		if dist <= explosion_radius:
+			# Daño máximo en el centro, mínimo en el borde
+			var damage = int(20 * (1.0 - clamp(dist / explosion_radius, 0, 1)))
+			if damage > 0:
+				wizard.apply_damage(damage)
+
+	# Mostrar animación de explosión
 	var explosion = explosion_scene.instantiate()
 	explosion.global_position = global_position
-	
-	# Explosion added to our parent, as we'll free ourselves.
-	# If we attached the explosion to ourself it'd get free'd as well,
-	# which would make them immediately vanish.
 	get_parent().add_child(explosion)
-
 	queue_free()

@@ -36,7 +36,7 @@ func _ready():
 	# Crear capa UI y banners de turno
 	var main_node = get_tree().current_scene
 	turn_banner_layer = CanvasLayer.new()
-	main_node.add_child(turn_banner_layer)
+	main_node.add_child.call_deferred(turn_banner_layer)
 
 	# Label pequeño persistente de turno (arriba-izquierda)
 	turn_label = Label.new()
@@ -72,7 +72,11 @@ func start_turn():
 		var camera_nodes = get_tree().get_nodes_in_group("cameras")
 		if camera_nodes.size() > 0:
 			var camera = camera_nodes[0]
-			camera.global_position = players[current_turn].global_position
+			# Seguir al jugador activo
+			if camera.has_method("follow_target"):
+				camera.follow_target(players[current_turn], true)
+			else:
+				camera.global_position = players[current_turn].global_position
 			if camera.has_method("set_follow_smoothing"):
 				camera.set_follow_smoothing(0.0)
 			if camera.has_method("make_current"):
@@ -90,6 +94,12 @@ func start_turn():
 			players[i].enable_player_input(i == current_turn)
 
 func end_turn():
+	# Detener seguimiento de cámara antes de cambiar de turno
+	var camera_nodes = get_tree().get_nodes_in_group("cameras")
+	if camera_nodes.size() > 0:
+		var camera = camera_nodes[0]
+		if camera.has_method("follow_target"):
+			camera.follow_target(null, false)
 	current_turn = (current_turn + 1) % players.size()
 	start_turn()
 

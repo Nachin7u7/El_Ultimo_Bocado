@@ -6,6 +6,8 @@ const PLAYER_VS_PLAYER = 0
 const PLAYER_VS_BOT = 1
 
 func _ready():
+	Engine.time_scale = 0.0001
+
 	var panel = Panel.new()
 	panel.anchor_left = 0.5
 	panel.anchor_top = 0.5
@@ -38,8 +40,10 @@ func _ready():
 
 func _on_friend_pressed():
 	emit_signal("mode_selected", PLAYER_VS_PLAYER)
+	Engine.time_scale = 1.0
 	queue_free()
 
 func _on_bot_pressed():
 	emit_signal("mode_selected", PLAYER_VS_BOT)
+	Engine.time_scale = 1.0
 	queue_free()

@@ -3,6 +3,8 @@ extends Camera2D
 
 var _previous_position : Vector2 = Vector2.ZERO
 var _move_camera := false
+var _target: Node2D = null
+var _follow_enabled: bool = false
 
 func _ready():
 	# Add camera to group so GameController can find it and set a more zoomed-out default
@@ -18,7 +20,7 @@ func _unhandled_input(event):
 			_move_camera = true
 		else:
 			_move_camera = false
-	
+
 	# Click and drag - dragging
 	elif event is InputEventMouseMotion && _move_camera:
 		get_viewport().set_input_as_handled()
@@ -32,8 +34,17 @@ func _unhandled_input(event):
 			new_zoom = zoom.lerp(Vector2(0.5, 0.5), 0.2)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			new_zoom = zoom.lerp(Vector2(4,4), 0.2)
-		
+
 		if (new_zoom != Vector2.ZERO):
 			get_viewport().set_input_as_handled()
 			zoom = new_zoom
-			
+
+func follow_target(target: Node2D, enabled: bool = true):
+	_target = target
+	_follow_enabled = enabled
+	if enabled:
+		make_current()
+
+func _process(_delta):
+	if _follow_enabled and _target:
+		global_position = lerp(global_position, _target.global_position, 0.15)
