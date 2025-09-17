@@ -53,6 +53,7 @@ script = ExtResource("8")
 script = ExtResource("10_vwqu0")
 
 [node name="DeathZone" type="Area2D" parent="."]
+position = Vector2(0, -222)
 script = ExtResource("11_5nfue")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DeathZone"]

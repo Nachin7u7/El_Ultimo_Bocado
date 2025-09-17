@@ -125,7 +125,7 @@ func get_current_turn_text() -> String:
 	if bot_enabled and current_turn == 1:
 		return "Turno: Bot"
 	else:
-		return "Turno: Jugador %d" % (current_turn+1)
+		return "Turno: %s" % players[current_turn].name
 
 func show_turn_banner(text: String):
 	if not turn_banner_label:
@@ -144,10 +144,57 @@ func bot_take_turn():
 	var bot = players[1]
 	var target = players[0]
 	var reticule = bot.reticule_anchor.find_child("Reticule")
+	var move_distance = 350 # Distancia mínima para acercarse
+	var max_move_time = 2.0 # Tiempo máximo de movimiento antes de disparar
+	var move_speed = bot._speed.x
+	var stuck_timer = 0.0
+	var last_x = bot.global_position.x
+	var move_dir = 0
+	var delta = 0.1 # Simulación de delta para cada paso
+
+	# Moverse hacia el jugador si está lejos
+	while bot.global_position.distance_to(target.global_position) > move_distance and stuck_timer < max_move_time:
+		var direction = (target.global_position - bot.global_position).normalized()
+		move_dir = sign(direction.x)
+		var input_direction = Vector2(move_dir, 0)
+		var prev_x = bot.global_position.x
+		# Simular movimiento llamando a la función de movimiento del player
+		bot._velocity = bot._calculate_move_velocity(bot._velocity, input_direction, bot._speed)
+		bot.set_velocity(bot._velocity)
+		bot.set_up_direction(Vector2(0, -1))
+		bot.move_and_slide()
+		bot._velocity = bot.velocity
+		# Animación y orientación igual que en _physics_process
+		if bot.anim:
+			if bot._velocity.x > 0:
+				bot.anim.flip_h = false
+			elif bot._velocity.x < 0:
+				bot.anim.flip_h = true
+			bot.anim.flip_v = false
+			var is_moving = abs(bot._velocity.x) > 1 or abs(bot._velocity.y) > 1
+			if is_moving and bot.is_on_floor():
+				if bot.anim.animation != "Walk":
+					bot.anim.play("Walk")
+			elif bot.is_on_floor():
+				if bot.anim.animation != "Idle":
+					bot.anim.play("Idle")
+			else:
+				bot.anim.stop()
+		# Si no avanzó, intentar saltar
+		if abs(bot.global_position.x - prev_x) < 2 and bot.is_on_floor():
+			var jump_dir = Vector2(move_dir, -1)
+			bot._velocity = bot._calculate_move_velocity(bot._velocity, jump_dir, bot._speed)
+			bot.set_velocity(bot._velocity)
+			bot.set_up_direction(Vector2(0, -1))
+			bot.move_and_slide()
+			bot._velocity = bot.velocity
+		await get_tree().create_timer(delta).timeout
+		stuck_timer += delta
+
+	# Apuntar y disparar
 	if reticule and target:
 		var direction = (target.global_position - bot.global_position).normalized()
 		reticule.global_position = bot.global_position + direction * 100
-	# Ajustar potencia del disparo del bot si se desea un vuelo más largo/corto
 	bot._attack_power = 1.0
 	bot.shoot() # Ahora se espera a impacto o timeout para cambiar turno
 

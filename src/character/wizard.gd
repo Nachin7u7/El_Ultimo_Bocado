@@ -18,7 +18,7 @@ var _attack_clicked : bool = false
 var is_active_turn: bool = false
 
 # --- SISTEMA DE VIDA Y DAÑO ---
-@export var max_hp: int = 10
+@export var max_hp: int = 200
 var current_hp: int = max_hp
 @onready var hp_label: Label = $HP
 @onready var damage_label: Label = $Damage
@@ -81,8 +81,8 @@ func die():
 	if not result_layer:
 		result_layer = result_scene.instantiate()
 		get_tree().get_root().add_child(result_layer)
-	# Determinar si este es el jugador 1 o 2 (puedes ajustar esto según tu lógica)
-	var loser = 1 if is_in_group("player1") else 2
+	# Pasar el nombre del nodo como perdedor
+	var loser = name
 	result_layer.show_result(loser)
 	# Opcional: puedes hacer queue_free() después de la animación si lo deseas
 
